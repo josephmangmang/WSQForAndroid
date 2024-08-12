@@ -1,12 +1,11 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 29
         versionName "1.2"
         versionCode 2
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,36 +26,29 @@ android {
         }
     }
 }
-
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.gemalto.wsq'
+            artifactId 'wsq-android'
+            version '1.2'
+            artifact("$buildDir/outputs/aar/wsq-android-release.aar")
+        }
+    }
+    repositories {
+        maven {
+            name = "GithubPackages"
+            url = uri("https://maven.pkg.github.com/josephmangmang/WSQForAndroid")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+            }
+        }
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'WSQForAndroid'
-
-    publishedGroupId = 'com.gemalto.wsq'
-    libraryName = 'WSQForAndroid'
-    artifact = 'wsq-android'
-
-    libraryDescription = 'A WSQ image encoder/decoder for Android'
-
-    siteUrl = 'https://github.com/gemalto/WSQForAndroid'
-    gitUrl = 'https://github.com/gemalto/WSQForAndroid.git'
-
-    libraryVersion = '1.2'
-
-    developerId = 'michal-dvorak-thales'
-    developerName = 'Michal Dvorak'
-    developerEmail = 'michal.dvorak@thalesgroup.com'
-
-    licenseName = 'The 2-Clause BSD License'
-    licenseUrl = 'https://opensource.org/licenses/BSD-2-Clause'
-    allLicenses = ["BSD-2-Clause"]
-}
-
-apply from: 'bintray.gradle'

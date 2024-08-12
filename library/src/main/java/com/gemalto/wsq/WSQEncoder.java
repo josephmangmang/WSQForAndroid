@@ -38,6 +38,10 @@ public class WSQEncoder {
     private int ppi = UNKNOWN_PPI;
     private String comment = null;
 
+    /**
+     * Create a new WSQEncoder instance.
+     * @param bmp the bitmap to encode
+     */
     public WSQEncoder(Bitmap bmp) {
         if (bmp == null) throw new IllegalArgumentException("Bitmap must not be null!");
         this.bmp = bmp;
