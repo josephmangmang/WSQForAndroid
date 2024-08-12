@@ -25,23 +25,23 @@ android {
             path "CMakeLists.txt"
         }
     }
-}
-publishing {
-    publications {
-        bar(MavenPublication) {
-            groupId 'com.gemalto.wsq'
-            artifactId 'wsq-android'
-            version '1.2'
-            artifact("$buildDir/outputs/aar/wsq-android-release.aar")
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
         }
     }
-    repositories {
-        maven {
-            name = "GithubPackages"
-            url = uri("https://maven.pkg.github.com/josephmangmang/WSQForAndroid")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                components.getByName('release')
+
+//                groupId 'com.gemalto.wsq'
+//                artifactId 'wsq-android'
+//                version '1.2'
             }
         }
     }
