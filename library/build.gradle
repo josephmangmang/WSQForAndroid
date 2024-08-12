@@ -37,11 +37,11 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                components.getByName('release')
-
-//                groupId 'com.gemalto.wsq'
-//                artifactId 'wsq-android'
-//                version '1.2'
+//                components.getByName('release')
+                from components.release
+                groupId 'com.gemalto.wsq'
+                artifactId 'wsq-android'
+                version '1.2'
             }
         }
     }
